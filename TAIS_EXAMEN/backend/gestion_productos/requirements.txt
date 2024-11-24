@@ -2,4 +2,3 @@ setuptools
 boto3
 django-storages
 zappa
-Werkzeug>=2.2.0

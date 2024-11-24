@@ -1,6 +1,9 @@
 from django.urls import path
-from .views import ProductoView
+from .views import MovimientoView
 
 urlpatterns = [
-    path("productos/", ProductoView.as_view()),
+
+    path('movimientos/', MovimientoView.as_view(), name='movimientos'),
+    path('movimientos/<str:id_movimiento>/',
+         MovimientoView.as_view(), name='movimiento_detalle'),
 ]

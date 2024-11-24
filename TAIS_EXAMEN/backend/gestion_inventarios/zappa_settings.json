@@ -10,7 +10,7 @@
             "concurrent"
         ],
         "profile_name": "default",
-        "project_name": "gestion-inventa",
+        "project_name": "gestion-product",
         "runtime": "python3.12",
         "s3_bucket": "zappa-cls88a3gv"
     },
