@@ -1,24 +1,17 @@
-import boto3
-from decimal import Decimal
+import requests
 
-# Configura la conexión a DynamoDB
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('Producto')
+id_producto = "cod-1245"
+producto_url = f"http://127.0.0.1:8000/api/productos/{id_producto}/"
 
-# Consulta todos los productos (o los productos que necesites modificar)
-response = table.scan()
-
-for item in response['Items']:
-    # Eliminar el atributo antiguo 'precio_unitario'
-    if 'precio_unitario' in item:
-        # Convierte el valor a Float (Decimal)
-        # Usamos Decimal para representar Float
-        nuevo_precio = Decimal(item['precio_unitario'])
-        # Actualiza el item eliminando el atributo antiguo y añadiendo el nuevo
-        table.update_item(
-            # Usa tu clave primaria aquí
-            Key={'id_producto': item['id_producto']},
-            UpdateExpression='REMOVE precio_unitario SET precio = :val',
-            ExpressionAttributeValues={':val': nuevo_precio}
-        )
-        print(f"Producto {item['id_producto']} actualizado")
+try:
+    response = requests.get(producto_url)
+    if response.status_code == 200:
+        producto = response.json()
+        print("Producto encontrado:", producto)
+    elif response.status_code == 404:
+        print("Producto no encontrado en el microservicio de productos.")
+    else:
+        print("Error desconocido al consultar el microservicio de productos:",
+              response.status_code)
+except requests.exceptions.RequestException as e:
+    print("Error de conexión con el microservicio de productos:", e)

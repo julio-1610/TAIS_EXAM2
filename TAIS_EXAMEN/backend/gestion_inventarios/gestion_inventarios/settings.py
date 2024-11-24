@@ -83,7 +83,6 @@ WSGI_APPLICATION = "gestion_inventarios.wsgi.application"
 #     }
 # }
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
