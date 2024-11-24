@@ -1,0 +1,4 @@
+setuptools
+boto3
+django-storages
+zappa
