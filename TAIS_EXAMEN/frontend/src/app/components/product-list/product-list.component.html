@@ -1,0 +1,30 @@
+<div class="container mt-4">
+  <h2 class="text-center">Lista de Productos</h2>
+  <table class="table table-striped mt-3">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="productos.length === 0">
+        <td colspan="6" class="text-center">No hay productos registrados</td>
+      <tr *ngFor="let producto of productos; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ producto.codigo }}</td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.categoria }}</td>
+        <td>{{ producto.precio }}</td>
+        <td>
+          <button class="btn btn-info btn-sm me-2" (click)="verDetalle(producto)">Ver</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.codigo)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
