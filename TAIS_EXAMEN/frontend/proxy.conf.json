@@ -1,0 +1,8 @@
+{
+  "/dev/api": {
+    "target": "https://qqicxb1ds4.execute-api.us-east-2.amazonaws.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

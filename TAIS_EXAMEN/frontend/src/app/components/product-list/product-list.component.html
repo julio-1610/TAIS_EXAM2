@@ -1,5 +1,11 @@
 <div class="container mt-4">
-  <h2 class="text-center">Lista de Productos</h2>
+  <h2 class="justify-content-between d-flex">
+    <i class="bi bi-house"></i>
+    Lista de Productos
+    <button class="btn btn-success justify-content-end" data-bs-toggle="modal" data-bs-target="#productModal">
+      Agregar producto
+    </button>
+  </h2>
   <table class="table table-striped mt-3">
     <thead>
       <tr>
@@ -8,6 +14,7 @@
         <th>Nombre</th>
         <th>Categoría</th>
         <th>Precio</th>
+        <th>Cantidad</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -16,15 +23,31 @@
         <td colspan="6" class="text-center">No hay productos registrados</td>
       <tr *ngFor="let producto of productos; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ producto.codigo }}</td>
+        <td>{{ producto.id_producto }}</td>
         <td>{{ producto.nombre }}</td>
         <td>{{ producto.categoria }}</td>
         <td>{{ producto.precio }}</td>
+        <td>{{ producto.cantidad}}</td>
         <td>
           <button class="btn btn-info btn-sm me-2" (click)="verDetalle(producto)">Ver</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.codigo)">Eliminar</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id_producto)">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!--  Modal producto -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Agregar Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <app-product-form (productSaved)="onProductSaved()"></app-product-form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

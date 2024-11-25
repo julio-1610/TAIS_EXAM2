@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,9 +21,11 @@ import { ProductViewComponent } from './components/product-view/product-view.com
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     CommonModule,
     RouterModule.forRoot(APP_ROUTES), // Configurar las rutas aquí
   ],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

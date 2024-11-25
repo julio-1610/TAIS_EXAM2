@@ -1,29 +1,42 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Product, ProductService } from '../../services/product-service/product.service';
+import { Movement, MovementService } from '../../services/movement-service/movement.service';
+import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, ProductFormComponent]
 })
 export class ProductListComponent {
-  productos = [
-    { codigo: 'P001', nombre: 'Producto 1', categoria: 'Electrónica', precio: 120 },
-    { codigo: 'P002', nombre: 'Producto 2', categoria: 'Ropa', precio: 50 },
-    { codigo: 'P003', nombre: 'Producto 3', categoria: 'Alimentos', precio: 30 },
-  ];
+  productos: Product[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private productService: ProductService,
+    private movementService: MovementService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
     console.log('Componente de lista de productos cargado');
-    this.productos = [
-      { codigo: 'P001', nombre: 'Producto 1', categoria: 'Electrónica', precio: 120 },
-      { codigo: 'P002', nombre: 'Producto 2', categoria: 'Ropa', precio: 50 },
-      { codigo: 'P003', nombre: 'Producto 3', categoria: 'Alimentos', precio: 30 },
-    ];
+    this.productService.getProducts().subscribe((data) => {
+      console.log('Productos:', data);
+      this.productos = data;
+    });
+    this.movementService.getMovements().subscribe((data) => {
+      console.log('Movimientos: ', data);
+    });
+  }
+
+  onProductSaved() {
+    this.loadProducts();
   }
 
   verDetalle(producto: any) {
@@ -31,8 +44,12 @@ export class ProductListComponent {
     console.log('Detalle del producto:', producto);
   }
 
-  eliminarProducto(codigo: string) {
-    this.productos = this.productos.filter((p) => p.codigo !== codigo);
-    console.log('Producto eliminado:', codigo);
+  agregarProducto() {
+
+  }
+
+  eliminarProducto(id_producto: number) {
+    this.productos = this.productos.filter((p) => p.id_producto !== id_producto);
+    console.log('Producto eliminado:', id_producto);
   }
 }
