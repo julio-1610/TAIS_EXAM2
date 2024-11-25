@@ -24,7 +24,7 @@ class MovimientoView(APIView):
             Movimiento.guardar_movimiento(movimiento)
 
             # Llamar al microservicio de productos para actualizar el inventario
-            producto_url = f"http://127.0.0.1:8000/api/productos/{movimiento['id_producto']}/actualizar_inventario/"
+            producto_url = f"https://qqicxb1ds4.execute-api.us-east-2.amazonaws.com/dev/api/productos/{movimiento['id_producto']}/actualizar_inventario/"
 
             cantidad = movimiento['cantidad'] if movimiento['tipo_movimiento'] == 'entrada' else - \
                 movimiento['cantidad']

@@ -1,6 +1,10 @@
 {
     "dev": {
         "aws_region": "us-east-2",
+        "cors": true,
+        "allowed_headers": ["Content-Type", "Authorization"],
+        "allowed_methods": ["GET", "POST", "OPTIONS"],
+        "allowed_origin": "*",
         "django_settings": "gestion_productos.settings",
         "exclude": [
             "boto3",
