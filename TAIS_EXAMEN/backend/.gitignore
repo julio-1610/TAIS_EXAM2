@@ -1,6 +1,7 @@
 # Entorno virtual
 venv/
 env/
+envProduct/
 
 # Archivos de configuración de IDEs
 .idea/
