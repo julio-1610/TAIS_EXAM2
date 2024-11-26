@@ -12,14 +12,16 @@ class ProductoView(APIView):
             producto = Producto.obtener_producto_por_id(id_producto)
             if producto:
                 return Response(
-                    ProductoSerializer(producto).data, status=status.HTTP_200_OK
+                    ProductoSerializer(
+                        producto).data, status=status.HTTP_200_OK
                 )
             return Response(
                 {"message": "Producto no encontrado"}, status=status.HTTP_404_NOT_FOUND
             )
         productos = Producto.obtener_productos()
         return Response(
-            ProductoSerializer(productos, many=True).data, status=status.HTTP_200_OK
+            ProductoSerializer(
+                productos, many=True).data, status=status.HTTP_200_OK
         )
 
     def post(self, request):
@@ -31,6 +33,38 @@ class ProductoView(APIView):
             Producto.guardar_producto(serializer.validated_data)
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Método PUT para actualizar un producto
+
+    def put(self, request, id_producto):
+        producto = Producto.obtener_producto_por_id(id_producto)
+        if not producto:
+            return Response(
+                {"message": "Producto no encontrado"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Actualizar el producto con los nuevos datos proporcionados
+        serializer = ProductoSerializer(
+            producto, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Actualizamos el producto en DynamoDB
+            Producto.guardar_producto(serializer.validated_data)
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Método DELETE para eliminar un producto
+    def delete(self, request, id_producto):
+        producto = Producto.obtener_producto_por_id(id_producto)
+        if not producto:
+            return Response(
+                {"message": "Producto no encontrado"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # Eliminar el producto
+        Producto.eliminar_producto(id_producto)
+        return Response({"message": "Producto eliminado correctamente"}, status=status.HTTP_200_OK)
 
 
 class ActualizarInventarioView(APIView):

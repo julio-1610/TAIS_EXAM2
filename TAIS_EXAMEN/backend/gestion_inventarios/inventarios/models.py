@@ -1,8 +1,6 @@
 import boto3
-
 from decimal import Decimal
 from django.core.exceptions import ValidationError
-
 
 # Conexión a DynamoDB
 dynamodb = boto3.resource("dynamodb")
@@ -15,8 +13,6 @@ class Movimiento:
     @staticmethod
     def guardar_movimiento(data):
         """Guarda un nuevo movimiento en DynamoDB."""
-        # Generar un ID único si no existe
-
         # Validar los datos antes de guardar
         Movimiento.validate_data(data)
 
@@ -75,7 +71,8 @@ class Movimiento:
     def obtener_movimiento_por_id(id_movimiento):
         """Obtiene un movimiento por su ID."""
         try:
-            response = table_movimiento.get_item(Key={"id_movimiento": id_movimiento})
+            response = table_movimiento.get_item(
+                Key={"id_movimiento": id_movimiento})
             return response.get("Item", None)
         except Exception as e:
             raise ValueError(f"Error al obtener el movimiento: {e}")
@@ -99,6 +96,16 @@ class Movimiento:
         if "cantidad" in data and (data["cantidad"] < 0 or data["cantidad"] is None):
             raise ValidationError("La cantidad no puede ser negativa o nula.")
         if "descripcion" in data and len(data["descripcion"]) < 5:
-            raise ValidationError("La descripción debe tener al menos 5 caracteres.")
+            raise ValidationError(
+                "La descripción debe tener al menos 5 caracteres.")
         if "precio" in data and (data["precio"] is None or data["precio"] < 0):
             raise ValidationError("El precio no puede ser nulo o negativo.")
+
+        # Validación del tipo de movimiento
+        if "tipo_movimiento" in data:
+            tipo = data["tipo_movimiento"].lower()
+            if tipo not in ["entrada", "salida"]:
+                raise ValidationError(
+                    "El tipo de movimiento debe ser 'entrada' o 'salida'.")
+        else:
+            raise ValidationError("El tipo de movimiento es obligatorio.")

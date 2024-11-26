@@ -7,6 +7,7 @@ class MovimientoSerializer(serializers.Serializer):
 
     id_movimiento = serializers.CharField()
     id_producto = serializers.CharField()
-    tipo_movimiento = serializers.CharField(max_length=50)
+    tipo_movimiento = serializers.ChoiceField(
+        choices=['entrada', 'salida'], required=True)
     cantidad = serializers.IntegerField()
     descripcion = serializers.CharField()
