@@ -35,7 +35,7 @@ class MovimientoView(APIView):
             if tipo_movimiento not in ["entrada", "salida"]:
                 return Response(
                     {"message": "El tipo de movimiento debe ser 'entrada' o 'salida'."},
-                    status=status.HTTP_400_BAD_REQUEST
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
 
             # Validación para movimiento de salida: Verificar que no se exceda la cantidad disponible
@@ -47,17 +47,21 @@ class MovimientoView(APIView):
 
                 if response_producto.status_code == 200:
                     producto = response_producto.json()
-                    cantidad_actual = producto.get("cantidad_disponible", 0)
+                    cantidad_actual = producto.get("cantidad", 0)
 
                     if cantidad_actual < requestid["cantidad"]:
                         return Response(
-                            {"message": "La cantidad de salida no puede ser mayor a la cantidad disponible del producto."},
-                            status=status.HTTP_400_BAD_REQUEST
+                            {
+                                "message": "La cantidad de salida no puede ser mayor a la cantidad disponible del producto."
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
                         )
                 else:
                     return Response(
-                        {"message": "Producto no encontrado en el microservicio de productos."},
-                        status=status.HTTP_404_NOT_FOUND
+                        {
+                            "message": "Producto no encontrado en el microservicio de productos."
+                        },
+                        status=status.HTTP_404_NOT_FOUND,
                     )
 
             # Si las validaciones son correctas, guardar el movimiento
@@ -65,8 +69,11 @@ class MovimientoView(APIView):
             Movimiento.guardar_movimiento(movimiento)
 
             # Llamar al microservicio de productos para actualizar el inventario
-            cantidad = movimiento["cantidad"] if tipo_movimiento == "entrada" else - \
+            cantidad = (
                 movimiento["cantidad"]
+                if tipo_movimiento == "entrada"
+                else -movimiento["cantidad"]
+            )
             producto_url = f"https://ohxkv3ewre.execute-api.us-east-2.amazonaws.com/dev/api/productos/{movimiento['id_producto']}/actualizar_inventario/"
             print(producto_url)
 
@@ -80,7 +87,9 @@ class MovimientoView(APIView):
                 )
             elif response.status_code == 404:
                 return Response(
-                    {"message": "Producto no encontrado en el microservicio de productos"},
+                    {
+                        "message": "Producto no encontrado en el microservicio de productos"
+                    },
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
@@ -98,21 +107,20 @@ class MovimientoView(APIView):
 
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
                 return Response(
-                    {"message": f"Movimiento con ID {id_movimiento} eliminado correctamente."},
-                    status=status.HTTP_200_OK
+                    {
+                        "message": f"Movimiento con ID {id_movimiento} eliminado correctamente."
+                    },
+                    status=status.HTTP_200_OK,
                 )
             else:
                 return Response(
                     {"message": "Error al eliminar el movimiento."},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
         except ValueError as e:
-            return Response(
-                {"message": str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response(
                 {"message": f"Error inesperado: {str(e)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
