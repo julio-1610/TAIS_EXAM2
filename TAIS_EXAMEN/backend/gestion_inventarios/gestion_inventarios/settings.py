@@ -26,7 +26,10 @@ SECRET_KEY = "django-insecure-j1kn2z#0o=n_a7ix87x&qefz%!9d-=^r_*h5hs2pf7d_mm_v6-
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "4w8r470is3.execute-api.us-east-2.amazonaws.com", "127.0.0.1", "localhost"]
+    "pzxkp74tnk.execute-api.us-east-2.amazonaws.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "inventarios",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -50,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "gestion_inventarios.urls"
@@ -124,3 +129,4 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+CORS_ALLOW_ALL_ORIGINS = True
