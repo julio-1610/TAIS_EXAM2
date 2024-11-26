@@ -8,26 +8,30 @@
   </h2>
   <!-- Filtros -->
   <div class="container d-flex justify-content-center align-items-center mb-3">
-    <div class="me-3">
-      <label for="filtroCategoria" class="form-label">Categoría</label>
-      <select id="filtroCategoria" class="form-select" [(ngModel)]="categoriaFiltro" (change)="filtrarProductos()">
-        <option value="" selected>Todas</option>
-        <option value="Electrónica">Electrónica</option>
-        <option value="Ropa">Ropa</option>
-        <option value="Alimentos">Alimentos</option>
-      </select>
+    <div class="d-flex justify-content-center w-100">
+      <div class="me-3">
+        <label for="filtroCategoria" class="form-label">Categoría</label>
+        <select id="filtroCategoria" class="form-select" [(ngModel)]="categoriaFiltro" (change)="filtrarProductos()">
+          <option value="" selected>Todas</option>
+          <option value="Electrónica">Electrónica</option>
+          <option value="Ropa">Ropa</option>
+          <option value="Alimentos">Alimentos</option>
+        </select>
+      </div>
+      <div class="me-3">
+        <label for="filtroCantidad" class="form-label">Cantidad mínima</label>
+        <input id="filtroCantidad" type="number" class="form-control" [(ngModel)]="cantidadFiltro"
+          (input)="filtrarProductos()" />
+      </div>
+      <div>
+        <label for="filtroPrecio" class="form-label">Precio máximo</label>
+        <input id="filtroPrecio" type="number" class="form-control" [(ngModel)]="precioFiltro"
+          (input)="filtrarProductos()" />
+      </div>
     </div>
-    <div class="me-3">
-      <label for="filtroCantidad" class="form-label">Cantidad mínima</label>
-      <input id="filtroCantidad" type="number" class="form-control" [(ngModel)]="cantidadFiltro"
-        (input)="filtrarProductos()" />
-    </div>
-    <div>
-      <label for="filtroPrecio" class="form-label">Precio máximo</label>
-      <input id="filtroPrecio" type="number" class="form-control" [(ngModel)]="precioFiltro"
-        (input)="filtrarProductos()" />
-    </div>
-    <button class="btn btn-danger me-3 align-middle" (click)="exportarPDF()">Exportar PDF</button>
+
+    <!-- Botón de exportar PDF alineado a la derecha -->
+    <button class="btn btn-danger ms-auto align-self-end" (click)="exportarPDF()">Exportar PDF</button>
   </div>
   <table class="table table-striped mt-3">
     <thead>

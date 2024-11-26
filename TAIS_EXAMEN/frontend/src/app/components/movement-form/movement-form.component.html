@@ -1,23 +1,38 @@
 <app-confirmation #movementConfirmation></app-confirmation>
 <form>
   <div class="mb-3">
-    <label for="tipoMovimiento" class="form-label">Tipo de Movimiento</label>
+    <label for="tipoMovimiento" class="form-label">Tipo de Movimiento*</label>
     <select id="tipoMovimiento" class="form-select" [(ngModel)]="movimiento.tipo_movimiento" name="tipoMovimiento"
-      required>
+      required #tipoMovimiento="ngModel">
       <option value="" disabled selected>Selecciona un tipo</option>
       <option value="entrada">ENTRADA</option>
-      <option value="salida">SALIDA</option>
+      <option value="salida" [disabled]="cantidadDisponible <= 0">SALIDA</option>
     </select>
+    <div *ngIf="!movimiento.tipo_movimiento && tipoMovimiento.touched" class="text-danger">Este campo es obligatorio
+    </div>
   </div>
   <div class="mb-3">
-    <label for="descripcion" class="form-label">Descripción</label>
+    <label for="descripcion" class="form-label">Descripción*</label>
     <input type="text" id="descripcion" class="form-control" [(ngModel)]="movimiento.descripcion" name="descripcion"
-      required />
+      required #descripcion="ngModel" />
+    <div *ngIf="!movimiento.descripcion && descripcion.touched" class="text-danger">Este campo es obligatorio</div>
   </div>
   <div class="mb-3">
-    <label for="cantidad" class="form-label">Cantidad</label>
-    <input type="number" id="cantidad" class="form-control" [(ngModel)]="movimiento.cantidad" name="cantidad"
-      required />
+    <label for="cantidad" class="form-label">Cantidad*</label>
+    <input type="number" id="cantidad" class="form-control" [(ngModel)]="movimiento.cantidad" name="cantidad" required
+      min="1" step="1" #cantidad="ngModel" />
+    <div *ngIf="movimiento.cantidad <= 0 && movimiento.cantidad !== null && cantidad.touched" class="text-danger">La
+      cantidad debe ser mayor
+      a 0.</div>
+    <div *ngIf="movimiento.tipo_movimiento === 'salida' && movimiento.cantidad > cantidadDisponible && cantidad.touched"
+      class="text-danger">
+      No puedes crear una salida mayor a la cantidad disponible.
+    </div>
+    <div *ngIf="!esEntero(movimiento.cantidad) && cantidad.touched" class="text-danger">
+      Solo se permiten números enteros.
+    </div>
   </div>
-  <button type="submit" class="btn btn-primary" (click)="guardarMovimiento()">Guardar Movimiento</button>
+  <button type="submit" class="btn btn-primary" [disabled]="!formularioValido()" (click)="guardarMovimiento()">
+    Guardar Movimiento
+  </button>
 </form>
