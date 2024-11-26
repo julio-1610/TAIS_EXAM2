@@ -9,7 +9,8 @@ class ProductoSerializer(serializers.Serializer):
     descripcion = serializers.CharField()
     categoria = serializers.CharField(max_length=100)
     precio = serializers.DecimalField(
-        max_digits=10, decimal_places=2)  # Cambiado a DecimalField
+        max_digits=10, decimal_places=2
+    )  # Cambiado a DecimalField
     cantidad = serializers.IntegerField()
 
     def validate_precio_unitario_float(self, value):
@@ -19,10 +20,12 @@ class ProductoSerializer(serializers.Serializer):
     def validate_id_producto(self, value):
         if not value:  # Verifica si el valor está vacío
             raise serializers.ValidationError(
-                "El campo 'id_producto' no puede estar vacío.")
+                "El campo 'id_producto' no puede estar vacío."
+            )
 
         producto_existente = Producto.obtener_producto_por_id(value)
         if producto_existente:
             raise serializers.ValidationError(
-                "El Código de producto ya existe. Por favor, utiliza un id único.")
+                "El Código de producto ya existe. Por favor, utiliza un id único."
+            )
         return value

@@ -1,2 +1,40 @@
+# Entorno virtual
+venv/
 env/
-envProduct/
+
+# Archivos de configuración de IDEs
+.idea/
+.vscode/
+*.swp
+
+# Archivos compilados de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de bases de datos locales
+db.sqlite3
+*.db
+
+# Archivos de migraciones
+**/migrations/* 
+!**/migrations/__init__.py
+
+# Archivos estáticos y multimedia
+/staticfiles/
+/media/
+
+# Archivos generados por testing o coverage
+*.log
+*.pot
+coverage_html_report/
+htmlcov/
+.coverage
+*.cover
+*.py,cover
+
+# Archivos de configuraciones específicas del sistema
+.env
+.DS_Store
+Thumbs.db

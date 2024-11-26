@@ -1,12 +1,12 @@
 from django.db import models
 import boto3
-import uuid
+
 from decimal import Decimal
 from django.core.exceptions import ValidationError
 
 # Conexión a DynamoDB
-dynamodb = boto3.resource('dynamodb')
-table_producto = dynamodb.Table('Producto')
+dynamodb = boto3.resource("dynamodb")
+table_producto = dynamodb.Table("Producto")
 
 
 class Producto(models.Model):
@@ -36,7 +36,7 @@ class Producto(models.Model):
             "descripcion": self.descripcion,
             "categoria": self.categoria,
             "precio": str(self.precio),  # Convertir Decimal a string
-            "cantidad": self.cantidad
+            "cantidad": self.cantidad,
         }
 
     @staticmethod
@@ -44,7 +44,11 @@ class Producto(models.Model):
         """Obtiene un producto de DynamoDB por id_producto."""
         try:
             response = table_producto.get_item(Key={"id_producto": id_producto})
-            return Producto.from_dict(response.get('Item', {})) if 'Item' in response else None
+            return (
+                Producto.from_dict(response.get("Item", {}))
+                if "Item" in response
+                else None
+            )
         except Exception as e:
             print(f"Error al obtener producto: {e}")
             return None
@@ -64,11 +68,6 @@ class Producto(models.Model):
     @staticmethod
     def guardar_producto(data):
         """Guarda un nuevo producto en DynamoDB."""
-        if "id_producto" not in data:
-            data["id_producto"] = str(uuid.uuid4())  # Generar ID automáticamente
-
-        # Validar los datos antes de guardarlos
-        Producto.validate_data(data)
 
         table_producto.put_item(Item=data)
 
@@ -76,7 +75,7 @@ class Producto(models.Model):
     def obtener_productos():
         """Obtiene todos los productos de DynamoDB."""
         response = table_producto.scan()
-        return response.get('Items', [])
+        return response.get("Items", [])
 
     @staticmethod
     def eliminar_producto(id_producto):
@@ -89,16 +88,3 @@ class Producto(models.Model):
                 print(f"Error al eliminar el producto con id {id_producto}.")
         except Exception as e:
             print(f"Error al eliminar producto: {e}")
-
-    @staticmethod
-    def validate_data(data):
-        """Valida los datos antes de guardarlos."""
-        if "precio" in data and (data["precio"] is None or data["precio"] < 0):
-            raise ValidationError("El precio no puede ser nulo o negativo.")
-        if "cantidad" in data and (data["cantidad"] < 0 or data["cantidad"] is None):
-            raise ValidationError("La cantidad no puede ser negativa o nula.")
-        if "nombre" in data and len(data["nombre"]) < 3:
-            raise ValidationError("El nombre del producto debe tener al menos 3 caracteres.")
-        if "descripcion" in data and len(data["descripcion"]) < 10:
-            raise ValidationError("La descripción debe tener al menos 10 caracteres.")
-
