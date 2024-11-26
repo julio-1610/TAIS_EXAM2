@@ -2,6 +2,7 @@ from django.db import models
 import boto3
 import uuid
 from decimal import Decimal
+from django.core.exceptions import ValidationError
 
 # Conexión a DynamoDB
 dynamodb = boto3.resource('dynamodb')
@@ -21,9 +22,10 @@ class Producto(models.Model):
 
     def actualizar_inventario(self, cantidad):
         """Actualizar la cantidad del producto."""
+        if cantidad < 0:
+            raise ValidationError("La cantidad no puede ser negativa.")
         self.cantidad += cantidad  # Modificar la cantidad según el movimiento
         # Guardar el producto actualizado en DynamoDB
-        # Asegúrate de tener un método to_dict para convertir el modelo a dict
         table_producto.put_item(Item=self.to_dict())
 
     def to_dict(self):
@@ -41,8 +43,7 @@ class Producto(models.Model):
     def obtener_producto_por_id(id_producto):
         """Obtiene un producto de DynamoDB por id_producto."""
         try:
-            response = table_producto.get_item(
-                Key={"id_producto": id_producto})
+            response = table_producto.get_item(Key={"id_producto": id_producto})
             return Producto.from_dict(response.get('Item', {})) if 'Item' in response else None
         except Exception as e:
             print(f"Error al obtener producto: {e}")
@@ -64,7 +65,11 @@ class Producto(models.Model):
     def guardar_producto(data):
         """Guarda un nuevo producto en DynamoDB."""
         if "id_producto" not in data:
-            data["id_producto"] = str(uuid.uuid4())
+            data["id_producto"] = str(uuid.uuid4())  # Generar ID automáticamente
+
+        # Validar los datos antes de guardarlos
+        Producto.validate_data(data)
+
         table_producto.put_item(Item=data)
 
     @staticmethod
@@ -77,12 +82,23 @@ class Producto(models.Model):
     def eliminar_producto(id_producto):
         """Elimina un producto de DynamoDB por id_producto."""
         try:
-            response = table_producto.delete_item(
-                Key={"id_producto": id_producto})
+            response = table_producto.delete_item(Key={"id_producto": id_producto})
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
-                print(
-                    f"Producto con id {id_producto} eliminado correctamente.")
+                print(f"Producto con id {id_producto} eliminado correctamente.")
             else:
                 print(f"Error al eliminar el producto con id {id_producto}.")
         except Exception as e:
             print(f"Error al eliminar producto: {e}")
+
+    @staticmethod
+    def validate_data(data):
+        """Valida los datos antes de guardarlos."""
+        if "precio" in data and (data["precio"] is None or data["precio"] < 0):
+            raise ValidationError("El precio no puede ser nulo o negativo.")
+        if "cantidad" in data and (data["cantidad"] < 0 or data["cantidad"] is None):
+            raise ValidationError("La cantidad no puede ser negativa o nula.")
+        if "nombre" in data and len(data["nombre"]) < 3:
+            raise ValidationError("El nombre del producto debe tener al menos 3 caracteres.")
+        if "descripcion" in data and len(data["descripcion"]) < 10:
+            raise ValidationError("La descripción debe tener al menos 10 caracteres.")
+
