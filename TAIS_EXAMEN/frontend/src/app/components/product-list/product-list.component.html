@@ -1,6 +1,6 @@
 <div class="container mt-4">
   <h2 class="justify-content-between d-flex">
-    <i class="bi bi-house"></i>
+    <i class="bi bi-house-fill"></i>
     Lista de Productos
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal">
       Agregar producto
@@ -32,7 +32,6 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>Código</th>
         <th>Nombre</th>
         <th>Categoría</th>
         <th>Precio</th>
@@ -45,7 +44,6 @@
         <td colspan="6" class="text-center">No hay productos registrados</td>
       <tr *ngFor="let producto of productosFiltrados; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ producto.id_producto }}</td>
         <td>{{ producto.nombre }}</td>
         <td>{{ producto.categoria }}</td>
         <td>{{ producto.precio }}</td>

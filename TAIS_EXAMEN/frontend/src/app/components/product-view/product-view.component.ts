@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Product, ProductService } from '../../services/product-service/product.service';
+import { Router } from '@angular/router';
+import { Product } from '../../services/product-service/product.service';
+import { ProductStateService } from '../../services/product-state/product-state.service';
 import { Movement, MovementService } from '../../services/movement-service/movement.service';
 import { CommonModule } from '@angular/common';
 import { MovementFormComponent } from '../movement-form/movement-form.component';
@@ -23,28 +24,30 @@ export class ProductViewComponent implements OnInit {
   movements: Movement[] = [];
 
   constructor(
-    private route: ActivatedRoute,
     private movementService: MovementService,
-    private productService: ProductService,
-    private router: Router) { }
+    private productStateService: ProductStateService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    const codigo = this.route.snapshot.paramMap.get('codigo');
-    console.log('Código del producto:', codigo);
+    const producto = this.productStateService.getProducto();
 
-    // Obtener detalles del producto desde el servicio
-    this.productService.getProductById(codigo!).subscribe((data) => {
-      this.producto = data;
-      console.log('Detalles del producto:', this.producto);
-    });
+    if (producto) {
+      this.producto = producto;
+      console.log('Producto recuperado del servicio:', this.producto);
+      this.loadMovements(this.producto.id_producto);
+    } else {
+      console.error('No se encontró producto en el servicio.');
+      this.router.navigate(['/product-list']); // Redirigir si no hay datos
+    }
+  }
 
-    // Obtener movimientos asociados al producto
-    this.movementService.getMovements().subscribe((data) => {
-      this.movements = data;
-      console.log('Movimientos del producto:', this.movements);
-      this.movements = data.filter((movement) => movement.id_producto === codigo);
-      console.log('Movimientos del producto:', this.movements);
-    },
+  private loadMovements(productId: string) {
+    this.movementService.getMovements().subscribe(
+      (data) => {
+        this.movements = data.filter((movement) => movement.id_producto === productId);
+        console.log('Movimientos cargados:', this.movements);
+      },
       (error) => {
         console.error('Error al cargar movimientos:', error);
       }
@@ -56,18 +59,8 @@ export class ProductViewComponent implements OnInit {
   }
 
   onMovementSaved() {
-    const codigo = this.producto?.id_producto;
-    if (codigo) {
-      this.movementService.getMovements().subscribe(
-        (data) => {
-          this.movements = data.filter((movement) => movement.id_producto === codigo);
-          console.log('Movimientos actualizados:', this.movements);
-        },
-        (error) => {
-          console.error('Error al actualizar movimientos:', error);
-        }
-      );
+    if (this.producto.id_producto) {
+      this.loadMovements(this.producto.id_producto); // Actualizar movimientos al guardar
     }
   }
-
 }

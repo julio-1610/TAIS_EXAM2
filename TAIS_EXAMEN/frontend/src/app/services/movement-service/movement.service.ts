@@ -13,7 +13,7 @@ export interface Movement {
   providedIn: 'root'
 })
 export class MovementService {
-  private url = "https://cxdw93tjxh.execute-api.us-east-2.amazonaws.com/dev/api/movimientos/";
+  private url = "https://pzxkp74tnk.execute-api.us-east-2.amazonaws.com/dev/api/movimientos/";
 
   constructor(
     private http: HttpClient

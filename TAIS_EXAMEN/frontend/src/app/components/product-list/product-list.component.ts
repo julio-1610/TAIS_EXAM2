@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Product, ProductService } from '../../services/product-service/product.service';
+import { ProductStateService } from '../../services/product-state/product-state.service';
 import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
@@ -20,6 +21,7 @@ export class ProductListComponent {
 
   constructor(
     private productService: ProductService,
+    private productStateService: ProductStateService,
     private router: Router
   ) { }
 
@@ -41,9 +43,9 @@ export class ProductListComponent {
     this.loadProducts();
   }
 
-  verDetalle(producto: any) {
-    this.router.navigate(['/product-view', producto.id_producto]);
-    console.log('Detalle del producto:', producto);
+  verDetalle(producto: Product) {
+    this.productStateService.setProducto(producto);
+    this.router.navigate(['/product-view']);
   }
 
   filtrarProductos() {

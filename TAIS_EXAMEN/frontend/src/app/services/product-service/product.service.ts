@@ -15,7 +15,7 @@ export interface Product {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://2vxfz35801.execute-api.us-east-2.amazonaws.com/dev/api/productos/';
+  private apiUrl = 'https://ohxkv3ewre.execute-api.us-east-2.amazonaws.com/dev/api/productos/';
 
   constructor(
     private http: HttpClient
