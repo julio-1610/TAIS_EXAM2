@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Product {
-  id_producto: number;
+  id_producto: string;
   nombre: string;
   descripcion: string;
   categoria: string;
@@ -24,6 +24,10 @@ export class ProductService {
   // Método para obtener todos los productos
   getProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
+  }
+
+  getProductById(id: string): Observable<any> {
+    return this.http.get<any>(this.apiUrl + id + "/");
   }
 
   saveProduct(product: Product): Observable<any> {

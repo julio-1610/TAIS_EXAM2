@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 
 export interface Movement {
   id_movimiento: number;
-  tipo_movimiento: string;
+  tipo_movimiento: string; // ENTRADA o SALIDA
   descripcion: string;
-  id_producto: number;
+  id_producto: string;
   cantidad: number;
 }
 @Injectable({
@@ -19,8 +19,11 @@ export class MovementService {
     private http: HttpClient
   ) { }
 
-  // Método para llamar todos los movimientos
   getMovements(): Observable<any[]> {
     return this.http.get<any[]>(this.url);
+  }
+
+  saveMovement(movement: Movement): Observable<any> {
+    return this.http.post<any>(this.url, movement);
   }
 }

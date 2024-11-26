@@ -12,7 +12,7 @@ export class ProductFormComponent {
   @Output() productSaved = new EventEmitter<void>();
 
   product: Product = {
-    id_producto: 0,
+    id_producto: '',
     nombre: '',
     descripcion: '',
     cantidad: 0,
@@ -41,7 +41,7 @@ export class ProductFormComponent {
 
   resetForm() {
     this.product = {
-      id_producto: 0,
+      id_producto: '',
       nombre: '',
       descripcion: '',
       cantidad: 0,
