@@ -22,8 +22,6 @@ class Producto(models.Model):
 
     def actualizar_inventario(self, cantidad):
         """Actualizar la cantidad del producto."""
-        if cantidad < 0:
-            raise ValidationError("La cantidad no puede ser negativa.")
         self.cantidad += cantidad  # Modificar la cantidad según el movimiento
         # Guardar el producto actualizado en DynamoDB
         table_producto.put_item(Item=self.to_dict())
