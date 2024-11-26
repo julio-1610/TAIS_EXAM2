@@ -7,7 +7,7 @@
     </button>
   </h2>
   <!-- Filtros -->
-  <div class="container d-flex justify-content-around align-items-center mb-3">
+  <div class="container d-flex justify-content-center align-items-center mb-3">
     <div class="me-3">
       <label for="filtroCategoria" class="form-label">Categoría</label>
       <select id="filtroCategoria" class="form-select" [(ngModel)]="categoriaFiltro" (change)="filtrarProductos()">
@@ -27,6 +27,7 @@
       <input id="filtroPrecio" type="number" class="form-control" [(ngModel)]="precioFiltro"
         (input)="filtrarProductos()" />
     </div>
+    <button class="btn btn-danger me-3 align-middle" (click)="exportarPDF()">Exportar PDF</button>
   </div>
   <table class="table table-striped mt-3">
     <thead>

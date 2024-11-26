@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Product } from '../../services/product-service/product.service';
+import { Product, ProductService } from '../../services/product-service/product.service';
 import { ProductStateService } from '../../services/product-state/product-state.service';
 import { Movement, MovementService } from '../../services/movement-service/movement.service';
 import { CommonModule } from '@angular/common';
@@ -25,6 +25,7 @@ export class ProductViewComponent implements OnInit {
 
   constructor(
     private movementService: MovementService,
+    private productService: ProductService,
     private productStateService: ProductStateService,
     private router: Router
   ) { }
@@ -45,6 +46,16 @@ export class ProductViewComponent implements OnInit {
   private loadMovements(productId: string) {
     this.movementService.getMovements().subscribe(
       (data) => {
+        this.productService.getProductById(productId).subscribe(
+          (product) => {
+            this.producto = product;
+            console.log('Producto cargado:', this.producto);
+          },
+          (error) => {
+            console.error('Error al cargar producto:', error);
+          }
+        );
+
         this.movements = data.filter((movement) => movement.id_producto === productId);
         console.log('Movimientos cargados:', this.movements);
       },

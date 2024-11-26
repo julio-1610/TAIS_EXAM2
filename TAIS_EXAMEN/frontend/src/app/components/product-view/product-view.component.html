@@ -36,7 +36,7 @@
         </tr>
         <tr *ngFor="let movement of movements; let i = index">
           <td>{{ i + 1 }}</td>
-          <td>{{ movement.tipo_movimiento }}</td>
+          <td>{{ movement.tipo_movimiento.toUpperCase() }}</td>
           <td>{{ movement.cantidad }}</td>
           <td>{{ movement.descripcion }}</td>
         </tr>

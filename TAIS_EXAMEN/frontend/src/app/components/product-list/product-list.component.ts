@@ -6,6 +6,9 @@ import { Product, ProductService } from '../../services/product-service/product.
 import { ProductStateService } from '../../services/product-state/product-state.service';
 import { ProductFormComponent } from '../product-form/product-form.component';
 
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -59,5 +62,35 @@ export class ProductListComponent {
 
       return coincideCategoria && coincideCantidad && coincidePrecio;
     });
+  }
+
+  exportarPDF() {
+    const doc = new jsPDF();
+
+    // Título del documento
+    doc.setFontSize(18);
+    doc.text('Lista de Productos Filtrados', 14, 20);
+
+    // Configurar encabezados de la tabla
+    const head = [['#', 'Nombre', 'Categoría', 'Precio', 'Cantidad']];
+
+    // Mapear los productos filtrados a filas
+    const data = this.productosFiltrados.map((producto, index) => [
+      index + 1,
+      producto.nombre,
+      producto.categoria,
+      producto.precio,
+      producto.cantidad,
+    ]);
+
+    // Crear la tabla con AutoTable
+    autoTable(doc, {
+      head: head,
+      body: data,
+      startY: 30,
+    });
+
+    // Descargar el archivo PDF
+    doc.save('Productos-Filtrados.pdf');
   }
 }
