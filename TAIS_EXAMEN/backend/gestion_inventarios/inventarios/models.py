@@ -2,7 +2,7 @@ import boto3
 import uuid
 from decimal import Decimal
 from django.core.exceptions import ValidationError
-from datetime import datetime
+
 
 # Conexión a DynamoDB
 dynamodb = boto3.resource('dynamodb')
@@ -83,7 +83,7 @@ class Movimiento:
     @staticmethod
     def obtener_movimientos_por_fecha(inicio, fin):
         """Obtiene los movimientos en un rango de fechas."""
-        # Asumiendo que la tabla tiene un campo 'fecha' de tipo string o datetime
+        # Asumiendo que la tabla tiene un campo 'fecha' de tipo string 
         try:
             response = table_movimiento.scan(
                 FilterExpression="fecha BETWEEN :inicio AND :fin",
@@ -105,6 +105,5 @@ class Movimiento:
             raise ValidationError("La descripción debe tener al menos 5 caracteres.")
         if "precio" in data and (data["precio"] is None or data["precio"] < 0):
             raise ValidationError("El precio no puede ser nulo o negativo.")
-        if "fecha" in data and not isinstance(data["fecha"], datetime):
-            raise ValidationError("La fecha debe ser un valor de tipo datetime.")
+     
 
