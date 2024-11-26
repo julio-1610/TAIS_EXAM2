@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Movement {
-  id_movimiento: number;
+  id_movimiento: string;
   tipo_movimiento: string; // ENTRADA o SALIDA
   descripcion: string;
   id_producto: string;

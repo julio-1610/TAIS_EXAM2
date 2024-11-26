@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Movement, MovementService } from '../../services/movement-service/movement.service';
@@ -9,23 +9,24 @@ import { Movement, MovementService } from '../../services/movement-service/movem
   styleUrls: ['./movement-form.component.css'],
   imports: [CommonModule, FormsModule]
 })
-export class MovementFormComponent {
+export class MovementFormComponent implements OnChanges {
   @Input() idProducto!: string; // ID del producto al que se asocia el movimiento
   @Output() movementSaved = new EventEmitter<void>(); // Emisor para notificar al padre que se guardó un movimiento
   movimiento: Movement = {
-    id_movimiento: 1600, // Será generado automáticamente en el backend
+    id_movimiento: '', // Será generado automáticamente en el backend
     tipo_movimiento: '',
     descripcion: '',
-    id_producto: this.idProducto,
+    id_producto: '',
     cantidad: 0
   };
 
   constructor(private movementService: MovementService) { }
 
-  ngOnInit() {
-    this.idProducto = this.idProducto || '';
-    console.log('ID del producto:', this.idProducto);
-    this.movimiento.id_producto = this.idProducto;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['idProducto'] && changes['idProducto'].currentValue) {
+      this.movimiento.id_producto = this.idProducto;
+      console.log('ID del producto asignado al formulario:', this.movimiento.id_producto);
+    }
   }
 
   guardarMovimiento() {
