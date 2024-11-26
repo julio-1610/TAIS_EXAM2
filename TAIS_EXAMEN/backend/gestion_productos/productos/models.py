@@ -1,11 +1,11 @@
 from django.db import models
 import boto3
-import uuid
+
 from decimal import Decimal
 
 # Conexión a DynamoDB
-dynamodb = boto3.resource('dynamodb')
-table_producto = dynamodb.Table('Producto')
+dynamodb = boto3.resource("dynamodb")
+table_producto = dynamodb.Table("Producto")
 
 
 class Producto(models.Model):
@@ -34,16 +34,19 @@ class Producto(models.Model):
             "descripcion": self.descripcion,
             "categoria": self.categoria,
             "precio": str(self.precio),  # Convertir Decimal a string
-            "cantidad": self.cantidad
+            "cantidad": self.cantidad,
         }
 
     @staticmethod
     def obtener_producto_por_id(id_producto):
         """Obtiene un producto de DynamoDB por id_producto."""
         try:
-            response = table_producto.get_item(
-                Key={"id_producto": id_producto})
-            return Producto.from_dict(response.get('Item', {})) if 'Item' in response else None
+            response = table_producto.get_item(Key={"id_producto": id_producto})
+            return (
+                Producto.from_dict(response.get("Item", {}))
+                if "Item" in response
+                else None
+            )
         except Exception as e:
             print(f"Error al obtener producto: {e}")
             return None
@@ -63,25 +66,22 @@ class Producto(models.Model):
     @staticmethod
     def guardar_producto(data):
         """Guarda un nuevo producto en DynamoDB."""
-        if "id_producto" not in data:
-            data["id_producto"] = str(uuid.uuid4())
+
         table_producto.put_item(Item=data)
 
     @staticmethod
     def obtener_productos():
         """Obtiene todos los productos de DynamoDB."""
         response = table_producto.scan()
-        return response.get('Items', [])
+        return response.get("Items", [])
 
     @staticmethod
     def eliminar_producto(id_producto):
         """Elimina un producto de DynamoDB por id_producto."""
         try:
-            response = table_producto.delete_item(
-                Key={"id_producto": id_producto})
+            response = table_producto.delete_item(Key={"id_producto": id_producto})
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
-                print(
-                    f"Producto con id {id_producto} eliminado correctamente.")
+                print(f"Producto con id {id_producto} eliminado correctamente.")
             else:
                 print(f"Error al eliminar el producto con id {id_producto}.")
         except Exception as e:
