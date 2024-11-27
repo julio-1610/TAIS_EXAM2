@@ -1,30 +1,77 @@
 <div class="container mt-4">
-  <h2 class="text-center">Lista de Productos</h2>
+  <h2 class="justify-content-between d-flex">
+    <i class="bi bi-house-fill"></i>
+    Lista de Productos
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal">
+      Agregar producto
+    </button>
+  </h2>
+  <!-- Filtros -->
+  <div class="container d-flex justify-content-center align-items-center mb-3">
+    <div class="d-flex justify-content-center w-100">
+      <div class="me-3">
+        <label for="filtroCategoria" class="form-label">Categoría</label>
+        <select id="filtroCategoria" class="form-select" [(ngModel)]="categoriaFiltro" (change)="filtrarProductos()">
+          <option value="" selected>Todas</option>
+          <option value="Electrónica">Electrónica</option>
+          <option value="Ropa">Ropa</option>
+          <option value="Alimentos">Alimentos</option>
+        </select>
+      </div>
+      <div class="me-3">
+        <label for="filtroCantidad" class="form-label">Cantidad mínima</label>
+        <input id="filtroCantidad" type="number" class="form-control" [(ngModel)]="cantidadFiltro"
+          (input)="filtrarProductos()" />
+      </div>
+      <div>
+        <label for="filtroPrecio" class="form-label">Precio máximo</label>
+        <input id="filtroPrecio" type="number" class="form-control" [(ngModel)]="precioFiltro"
+          (input)="filtrarProductos()" />
+      </div>
+    </div>
+
+    <!-- Botón de exportar PDF alineado a la derecha -->
+    <button class="btn btn-danger ms-auto align-self-end" (click)="exportarPDF()">Exportar PDF</button>
+  </div>
   <table class="table table-striped mt-3">
     <thead>
       <tr>
         <th>#</th>
-        <th>Código</th>
         <th>Nombre</th>
         <th>Categoría</th>
         <th>Precio</th>
+        <th>Cantidad</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngIf="productos.length === 0">
+      <tr *ngIf="productosFiltrados.length === 0">
         <td colspan="6" class="text-center">No hay productos registrados</td>
-      <tr *ngFor="let producto of productos; let i = index">
+      <tr *ngFor="let producto of productosFiltrados; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ producto.codigo }}</td>
         <td>{{ producto.nombre }}</td>
         <td>{{ producto.categoria }}</td>
         <td>{{ producto.precio }}</td>
+        <td>{{ producto.cantidad}}</td>
         <td>
           <button class="btn btn-info btn-sm me-2" (click)="verDetalle(producto)">Ver</button>
-          <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.codigo)">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!--  Modal producto -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModalLabel">Agregar Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <app-product-form (productSaved)="onProductSaved()"></app-product-form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

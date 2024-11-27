@@ -1,38 +1,96 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Product, ProductService } from '../../services/product-service/product.service';
+import { ProductStateService } from '../../services/product-state/product-state.service';
+import { ProductFormComponent } from '../product-form/product-form.component';
+
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, ProductFormComponent, FormsModule]
 })
 export class ProductListComponent {
-  productos = [
-    { codigo: 'P001', nombre: 'Producto 1', categoria: 'Electrónica', precio: 120 },
-    { codigo: 'P002', nombre: 'Producto 2', categoria: 'Ropa', precio: 50 },
-    { codigo: 'P003', nombre: 'Producto 3', categoria: 'Alimentos', precio: 30 },
-  ];
+  productos: Product[] = [];
+  productosFiltrados: Product[] = [];
+  categoriaFiltro: string = '';
+  cantidadFiltro: number | null = null;
+  precioFiltro: number | null = null;
 
-  constructor(private router: Router) { }
+  constructor(
+    private productService: ProductService,
+    private productStateService: ProductStateService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
     console.log('Componente de lista de productos cargado');
-    this.productos = [
-      { codigo: 'P001', nombre: 'Producto 1', categoria: 'Electrónica', precio: 120 },
-      { codigo: 'P002', nombre: 'Producto 2', categoria: 'Ropa', precio: 50 },
-      { codigo: 'P003', nombre: 'Producto 3', categoria: 'Alimentos', precio: 30 },
-    ];
+    this.productService.getProducts().subscribe((data) => {
+      console.log('Productos:', data);
+      this.productos = data;
+      this.productosFiltrados = [...this.productos]; // Mostrar todos inicialmente
+      this.filtrarProductos(); // Aplicar filtros en caso de valores iniciales
+    });
   }
 
-  verDetalle(producto: any) {
-    this.router.navigate(['/product-view', producto.codigo]);
-    console.log('Detalle del producto:', producto);
+  onProductSaved() {
+    this.loadProducts();
   }
 
-  eliminarProducto(codigo: string) {
-    this.productos = this.productos.filter((p) => p.codigo !== codigo);
-    console.log('Producto eliminado:', codigo);
+  verDetalle(producto: Product) {
+    this.productStateService.setProducto(producto);
+    this.router.navigate(['/product-view']);
+  }
+
+  filtrarProductos() {
+    this.productosFiltrados = this.productos.filter((producto) => {
+      const coincideCategoria =
+        !this.categoriaFiltro || producto.categoria === this.categoriaFiltro;
+      const coincideCantidad =
+        this.cantidadFiltro === null || producto.cantidad >= this.cantidadFiltro;
+      const coincidePrecio =
+        this.precioFiltro === null || producto.precio <= this.precioFiltro;
+
+      return coincideCategoria && coincideCantidad && coincidePrecio;
+    });
+  }
+
+  exportarPDF() {
+    const doc = new jsPDF();
+
+    // Título del documento
+    doc.setFontSize(18);
+    doc.text('Lista de Productos Filtrados', 14, 20);
+
+    // Configurar encabezados de la tabla
+    const head = [['#', 'Nombre', 'Categoría', 'Precio', 'Cantidad']];
+
+    // Mapear los productos filtrados a filas
+    const data = this.productosFiltrados.map((producto, index) => [
+      index + 1,
+      producto.nombre,
+      producto.categoria,
+      producto.precio,
+      producto.cantidad,
+    ]);
+
+    // Crear la tabla con AutoTable
+    autoTable(doc, {
+      head: head,
+      body: data,
+      startY: 30,
+    });
+
+    // Descargar el archivo PDF
+    doc.save('Productos-Filtrados.pdf');
   }
 }

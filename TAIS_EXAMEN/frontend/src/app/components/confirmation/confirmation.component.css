@@ -1,0 +1,31 @@
+.alert {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  width: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Color para el ícono según el tipo de alerta */
+.alert-success .bi {
+  color: #4caf50; /* Verde para éxito */
+}
+
+.alert-warning .bi {
+  color: #ffc107; /* Amarillo para advertencia */
+}
+
+.alert-info .bi {
+  color: #17a2b8; /* Azul para información */
+}
+
+.alert-danger .bi {
+  color: #dc3545; /* Rojo para error */
+}

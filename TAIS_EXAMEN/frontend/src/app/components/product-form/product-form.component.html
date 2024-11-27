@@ -1,37 +1,59 @@
-<div class="container mt-4">
-  <h2 class="text-center">Formulario de Producto</h2>
+<div class="container">
+  <app-confirmation #productConfirmation></app-confirmation>
   <form>
     <div class="mb-3">
-      <label for="codigo" class="form-label">Código</label>
-      <input type="text" id="codigo" class="form-control" placeholder="Ingrese el código del producto" />
+      <label for="nombre" class="form-label">Nombre del producto:</label>
+      <input type="text" id="nombre" class="form-control" placeholder="Ingrese el nombre del producto"
+        [(ngModel)]="product.nombre" name="nombre" required maxlength="50" #nombre="ngModel" />
+      <div *ngIf="nombre.invalid && nombre.touched" class="text-danger">
+        El nombre es obligatorio y debe tener máximo 50 caracteres.
+      </div>
+      <div *ngIf="!validateName() && nombre.touched" class="text-danger">
+        El nombre del producto ya existe.
+      </div>
     </div>
     <div class="mb-3">
-      <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" id="nombre" class="form-control" placeholder="Ingrese el nombre del producto" />
-    </div>
-    <div class="mb-3">
-      <label for="descripcion" class="form-label">Descripción</label>
-      <textarea id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción"></textarea>
+      <label for="descripcion" class="form-label">Descripción (Opcional)</label>
+      <textarea id="descripcion" class="form-control" rows="3" placeholder="Ingrese la descripción"
+        [(ngModel)]="product.descripcion" name="descripcion" required></textarea>
+      <div *ngIf="!product.descripcion && product.descripcion !== ''" class="text-danger">
+        La descripción es obligatoria.
+      </div>
     </div>
     <div class="mb-3">
       <label for="cantidad" class="form-label">Cantidad</label>
-      <input type="number" id="cantidad" class="form-control" placeholder="Ingrese la cantidad" />
+      <input type="number" id="cantidad" class="form-control" placeholder="Ingrese la cantidad"
+        [(ngModel)]="product.cantidad" name="cantidad" required min="0" step="1" #cantidad="ngModel" />
+      <div *ngIf="cantidad.invalid && cantidad.touched" class="text-danger">
+        La cantidad es obligatoria y no puede ser negativa.
+      </div>
+      <div *ngIf="product.cantidad !== null && !esEntero(product.cantidad)" class="text-danger">
+        La cantidad debe ser un número entero.
+      </div>
     </div>
     <div class="mb-3">
       <label for="precioUnitario" class="form-label">Precio Unitario</label>
-      <input type="number" id="precioUnitario" class="form-control" placeholder="Ingrese el precio unitario"
-        step="0.01" />
+      <input type="number" id="precioUnitario" class="form-control" placeholder="Ingrese el precio unitario" step="0.01"
+        [(ngModel)]="product.precio" name="precioUnitario" required min="0" #precio="ngModel" />
+      <div *ngIf="precio.invalid && precio.touched" class="text-danger">
+        El precio es obligatorio y no puede ser negativo.
+      </div>
     </div>
     <div class="mb-3">
       <label for="categoria" class="form-label">Categoría</label>
-      <select id="categoria" class="form-select">
-        <option selected>Seleccione una categoría</option>
+      <select id="categoria" class="form-select" [(ngModel)]="product.categoria" name="categoria" required
+        #categoria="ngModel" placeholder="Seleccione una categoría">
+        <option value="" selected disabled>Seleccione una categoría</option>
         <option value="1">Electrónica</option>
         <option value="2">Ropa</option>
         <option value="3">Alimentos</option>
       </select>
+      <div *ngIf="categoria.invalid && categoria.touched" class="text-danger">
+        La categoría es obligatoria.
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <button type="reset" class="btn btn-secondary ms-2">Limpiar</button>
+    <button type="submit" class="btn btn-primary"
+      [disabled]="!nombre.valid || !categoria.valid || !precio.valid || !cantidad.valid || !product.descripcion"
+      (click)="saveProduct()">Guardar</button>
   </form>
 </div>
