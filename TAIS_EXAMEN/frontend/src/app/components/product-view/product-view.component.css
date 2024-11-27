@@ -1,0 +1,24 @@
+
+  h2 {
+    font-size: 4rem;
+    color:#0D5492 ;
+    size: 4m;  }
+  h3 {
+    font-size: 3rem;
+    color:#0D5492 ;
+  }
+  h4 {
+    font-size: 2rem;
+    color:#0D5492 ;
+  }
+  p strong{
+
+    color:#0D5492 ;
+  }
+  .table, .table th, .table td {
+    border: none !important;
+  }
+  .btn-sm {
+    padding: 5px 10px; 
+    font-size: 12px; 
+  }

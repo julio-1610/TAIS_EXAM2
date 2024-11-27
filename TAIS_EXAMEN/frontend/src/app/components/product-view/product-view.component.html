@@ -1,26 +1,51 @@
-<div class="container mt-4">
-  <h2 class="text-center">Detalle del Producto</h2>
-  <div class="card mt-3">
-    <div class="card-header bg-primary text-white">Producto: {{ producto.nombre }}</div>
-    <div class="card-body">
-      <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
-      <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
-      <p><strong>Precio Unitario:</strong> {{ producto.precio }}</p>
-      <p><strong>Cantidad:</strong> {{ producto.cantidad }}</p>
-    </div>
-    <div class="card-footer">
-      <button class="btn btn-secondary" (click)="volver()">Volver</button>
+<div class="container mt-4 raw" >
+  <div class="d-flex justify-content-between align-items-center"style="background-color: #f7f7f7;">
+    <h2 class="text" style="font-size: 25px;">{{ producto.nombre }}</h2>
+    <h4 class="text" style="font-size: 25px;">Código: {{ producto.id_producto }}</h4>
+  </div>
+  <hr>
+  <div class="container" >
+    <div class="row mb-2">
+      <div class="col">
+        <p class="text-center">
+          <strong>Descripción:</strong><br>
+          {{ producto.descripcion }}
+        </p>
+      </div>
+      <div class="col">
+        <p class="text-center">
+          <strong>Categoría:</strong><br>
+          {{ producto.categoria }}
+        </p>
+      </div>
+      <div class="col">
+        <p class="text-center">
+          <strong>Precio Unitario:</strong><br>
+          {{ producto.precio }}
+        </p>
+      </div>
+      <div class="col">
+        <p class="text-center">
+          <strong>Cantidad:</strong><br>
+          {{ producto.cantidad }}
+        </p>
+      </div>
     </div>
   </div>
 
-  <!-- Tabla de movimientos -->
+  <button class="btn btn-secondary" (click)="volver()">Volver</button>
+</div>
+
+<!-- Tabla de movimientos -->
+<div class="container mt-4">
   <div class="d-flex justify-content-between">
-    <h3 class="mt-4">Movimientos del Producto</h3>
-    <button class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#movementModal">
-      Agregar Movimiento
+    <h3 class="mt-4" style="font-size: 20px;">Movimientos del Producto</h3>
+    <button class="btn" style="background-color: #0D5492; border-radius: 22px; border: none; color: white;" data-bs-toggle="modal" data-bs-target="#movementModal">
+      <i class="bi bi-plus-circle" style="color: white;"></i> Agregar Movimiento
     </button>
+    
   </div>
-  <div class=" table-responsive">
+  <div class="table-responsive">
     <table class="table table-striped mt-3">
       <thead>
         <tr>
@@ -60,3 +85,4 @@
       </div>
     </div>
   </div>
+</div>
