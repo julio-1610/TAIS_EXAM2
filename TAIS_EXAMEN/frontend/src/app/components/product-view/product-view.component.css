@@ -1,0 +1,29 @@
+* {
+    font-family: 'Ovo';
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/ovo/v17/yYLl0h7WyfzTzI44.woff2) format('woff2');
+    
+  }
+  h2 {
+    font-size: 5rem;
+    color:#1E88E5 ;
+    size: 5m;  }
+  h3 {
+    font-size: 3rem;
+    color:#0D5492 ;
+  }
+  h4 {
+    font-size: 2rem;
+    color:#0D5492 ;
+  }
+  p strong{
+
+    color:#0D5492 ;
+  }
+  .table, .table th, .table td {
+    border: none !important;
+  }
+  .btn-sm {
+    padding: 5px 10px; 
+    font-size: 12px; 
+  }
