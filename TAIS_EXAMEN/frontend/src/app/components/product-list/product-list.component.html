@@ -10,10 +10,8 @@
   <!-- Lista de productos -->
   <div class="d-flex justify-content-center">
     <div class="w-100" style="max-width: 1200px;">
-
-      
       <!-- Filtros y Botones -->
-      <div class="container d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex w-100">
           <!-- Filtros -->
           <div class="me-3">
@@ -34,25 +32,23 @@
             <input id="filtroPrecio" type="number" class="form-control" [(ngModel)]="precioFiltro" (input)="filtrarProductos()" />
           </div>
         </div>
-        
+
         <!-- Botones: Agregar Producto y Exportar PDF -->
         <div class="d-flex align-items-center">
-          <!-- Botón Agregar Producto -->
           <button 
             class="btn btn-sm me-2" 
-            style="background-color: #0D5492; color: white; border-radius: 15px; border: none;" 
+            style="background-color: white; color: #0D5492; border: 2px solid #0D5492; border-radius: 15px; min-width: 150px;" 
             data-bs-toggle="modal" data-bs-target="#productModal">
-            <i class="bi bi-plus-circle" style="color: white;"></i> Agregar Producto
+            <i class="bi bi-plus-circle" style="color: #0D5492;"></i> Agregar Producto
           </button>
-
-          <!-- Botón Exportar PDF -->
           <button 
             class="btn btn-sm" 
-            style="background-color: #0D5492; color: white; border-radius: 15px; border: none;" 
+            style="background-color: white; color: #0D5492; border: 2px solid #0D5492; border-radius: 15px; min-width: 150px;" 
             (click)="exportarPDF()">
-            <i class="bi bi-file-earmark-pdf" style="color: white;"></i> Exportar PDF
+            <i class="bi bi-file-earmark-pdf" style="color: #0D5492;"></i> Exportar PDF
           </button>
         </div>
+        
       </div>
 
       <!-- Tabla de productos -->
@@ -80,7 +76,7 @@
             <td>
               <button 
                 class="btn btn-sm me-2" 
-                style="background-color: #0D5492; border-radius: 5px; border: none; color: white;" 
+                style="background-color: #0D5492; border-radius: 15px; border: none; color: white;" 
                 (click)="verDetalle(producto)">
                 <i class="bi bi-eye" style="color: white;"></i> Visualizar producto
               </button>
